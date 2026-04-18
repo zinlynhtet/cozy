@@ -35,19 +35,28 @@ export default function Home() {
 
   const totalElements = 25; 
   
-  // Calculate the parametric heart equation positions during render
   const hearts = Array.from({ length: totalElements }).map((_, i) => {
+    const getPos = (ang: number) => {
+      const px = 16 * Math.pow(Math.sin(ang), 3);
+      const py = -(13 * Math.cos(ang) - 5 * Math.cos(2 * ang) - 2 * Math.cos(3 * ang) - Math.cos(4 * ang));
+      return { px, py };
+    };
+
     const angle = ((i / totalElements) * Math.PI * 2) + timeOffset;
+    const pos = getPos(angle);
+    const nextPos = getPos(angle + 0.01);
+
+    // Calculate tangent angle for rotation so text points along the curve
+    const dx = nextPos.px - pos.px;
+    const dy = nextPos.py - pos.py;
+    const rotation = Math.atan2(dy, dx) * (180 / Math.PI);
     
-    const x = 16 * Math.pow(Math.sin(angle), 3);
-    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
-    
-    // Map Cartesian coordinates to percentage logic!
-    // Using 18 bounds allows the text to stay nicely inside the edges of the box 100% responsively.
+    // Map Cartesian coordinates to percentage logic
     return {
       id: i, 
-      x: ((x / 18) * 50).toFixed(3),
-      y: ((y / 18) * 50).toFixed(3),
+      x: ((pos.px / 18) * 50).toFixed(3),
+      y: ((pos.py / 18) * 50).toFixed(3),
+      rotation: rotation.toFixed(2),
       index: i
     };
   });
@@ -69,7 +78,8 @@ export default function Home() {
   // Automatically updating live countdown mathematically computed via component frames
   let years = 0, months = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
   if (mounted) {
-    const start = new Date('2023-09-28T00:00:00'.replace(/-/g, "/"));
+    // using Number arguments (year, monthIndex, day) safely works across all browsers
+    const start = new Date(2023, 8, 28); // Sep 28, 2023 
     const now = new Date();
     
     years = now.getFullYear() - start.getFullYear();
@@ -126,16 +136,17 @@ export default function Home() {
           {hearts.map((heart) => (
             <div
               key={heart.id}
-              className="absolute transform-style-3d"
+              className="absolute transform-style-3d whitespace-nowrap"
               style={{
                 left: `calc(50% + ${heart.x}%)`,
                 top: `calc(50% + ${heart.y}%)`,
+                transform: `translate(-50%, -50%) rotate(${heart.rotation}deg)`,
                 // Pulls strictly from its exact geometric center regardless of varying word widths
               } as React.CSSProperties}
             >
               <div 
-                className="love_word font-bold tracking-[1.5px] whitespace-nowrap select-none"
-                style={{ fontSize: 'clamp(0.6rem, 2vmin, 1rem)' }} // flawless bound scaling
+                className="love_word font-bold tracking-[1.5px] select-none"
+                style={{ fontSize: 'clamp(0.4rem, 1.2vmin, 0.8rem)' }} // scaled down slightly to fit curve
               >
                 I love You, Achitkaly
               </div>
