@@ -1,22 +1,10 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Home() {
   const [timeOffset, setTimeOffset] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-    }
-  };
 
   // Smooth endless escalator effect around the perimeter of the heart
   useEffect(() => {
@@ -36,27 +24,17 @@ export default function Home() {
   const totalElements = 25; 
   
   const hearts = Array.from({ length: totalElements }).map((_, i) => {
-    const getPos = (ang: number) => {
-      const px = 16 * Math.pow(Math.sin(ang), 3);
-      const py = -(13 * Math.cos(ang) - 5 * Math.cos(2 * ang) - 2 * Math.cos(3 * ang) - Math.cos(4 * ang));
-      return { px, py };
-    };
-
     const angle = ((i / totalElements) * Math.PI * 2) + timeOffset;
-    const pos = getPos(angle);
-    const nextPos = getPos(angle + 0.01);
-
-    // Calculate tangent angle for rotation so text points along the curve
-    const dx = nextPos.px - pos.px;
-    const dy = nextPos.py - pos.py;
-    const rotation = Math.atan2(dy, dx) * (180 / Math.PI);
     
-    // Map Cartesian coordinates to percentage logic
+    const x = 16 * Math.pow(Math.sin(angle), 3);
+    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+    
+    // Map Cartesian coordinates to percentage logic!
+    // Using 18 bounds allows the text to stay nicely inside the edges of the box 100% responsively.
     return {
       id: i, 
-      x: ((pos.px / 18) * 50).toFixed(3),
-      y: ((pos.py / 18) * 50).toFixed(3),
-      rotation: rotation.toFixed(2),
+      x: ((x / 18) * 50).toFixed(3),
+      y: ((y / 18) * 50).toFixed(3),
       index: i
     };
   });
@@ -136,17 +114,16 @@ export default function Home() {
           {hearts.map((heart) => (
             <div
               key={heart.id}
-              className="absolute transform-style-3d whitespace-nowrap"
+              className="absolute transform-style-3d"
               style={{
                 left: `calc(50% + ${heart.x}%)`,
                 top: `calc(50% + ${heart.y}%)`,
-                transform: `translate(-50%, -50%) rotate(${heart.rotation}deg)`,
                 // Pulls strictly from its exact geometric center regardless of varying word widths
               } as React.CSSProperties}
             >
               <div 
-                className="love_word font-bold tracking-[1.5px] select-none"
-                style={{ fontSize: 'clamp(0.4rem, 1.2vmin, 0.8rem)' }} // scaled down slightly to fit curve
+                className="love_word font-bold tracking-[1.5px] whitespace-nowrap select-none"
+                style={{ fontSize: 'clamp(0.6rem, 2vmin, 1rem)' }} // flawless bound scaling
               >
                 I love You, Achitkaly
               </div>
@@ -178,57 +155,6 @@ export default function Home() {
           </div>
         </div>
 
-      </div>
-
-      {/* Hidden Audio Element */}
-      <audio 
-        ref={audioRef} 
-        src="/wanna-be-yours.mp3" 
-        loop
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-      />
-
-      {/* Ultra-Modern Glassmorphic Dual-Track Music Player at the Bottom */}
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-2 z-20 w-[95vw] sm:w-[85vw] md:w-[70vw] max-w-4xl bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl px-5 py-3 shadow-[0_0_25px_rgba(234,128,176,0.15)]">
-        
-        {/* Track 1: Original Romantic Text */}
-        <div className="flex w-full items-center gap-3 border-b border-white/10 pb-2">
-          <button 
-            onClick={togglePlay}
-            className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-pink-500/20 border border-pink-400/50 text-[10px] sm:text-xs hover:bg-pink-500/40 hover:scale-105 transition-all focus:outline-none drop-shadow-[0_0_10px_rgba(234,128,176,0.8)] z-30 cursor-pointer"
-            title="Play Song"
-          >
-            {isPlaying ? '⏸' : '▶'}
-          </button>
-          <div 
-            className="overflow-hidden whitespace-nowrap w-full pointer-events-none"
-            style={{
-               maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-               WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
-            }}
-          >
-            <div className="inline-block animate-marquee text-pink-200 text-[10px] sm:text-xs md:text-sm font-medium tracking-widest drop-shadow-md pr-full uppercase">
-              You are the missing piece to my soul ♥ My heart beats only for you ♥ Every moment with you is a dream come true ♥ I will love you today, tomorrow, and forever 
-            </div>
-          </div>
-        </div>
-
-        {/* Track 2: Lyrics */}
-        <div className="flex w-full items-center gap-3 pt-0.5">
-          <span className="text-pink-400/80 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">Lyrics</span>
-          <div 
-            className="overflow-hidden whitespace-nowrap w-full opacity-80"
-            style={{
-               maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-               WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
-            }}
-          >
-            <div className="inline-block animate-marquee-lyrics text-pink-300 text-[9px] sm:text-[11px] md:text-xs font-mono tracking-wider pr-full">
-              I wanna be your vacuum cleaner • Breathing in your dust • I wanna be your Ford Cortina • I will never rust • If you like your coffee hot • Let me be your coffee pot • You call the shots, babe • I just wanna be yours • Secrets I have held in my heart • Are harder to hide than I thought • Maybe I just wanna be yours • Let me be your 'leccy meter • And I'll never run out • Let me be the portable heater • That you'll get cold without • I wanna be your setting lotion • Hold your hair in deep devotion • At least as deep as the Pacific Ocean • I wanna be yours
-            </div>
-          </div>
-        </div>
       </div>
 
     </div>

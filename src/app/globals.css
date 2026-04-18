@@ -32,6 +32,7 @@ body {
 .love_word {
   color: #fdf2f8; /* Crisp ultralight pink core for intense neon realism */
   text-shadow: 0 0 5px #fff, 0 0 15px var(--heart-color), 0 0 35px var(--heart-color); /* Premium multi-layered neon bloom */
+  transform: translateY(-100%) rotateZ(-30deg);
   letter-spacing: 1.5px;
 }
 
