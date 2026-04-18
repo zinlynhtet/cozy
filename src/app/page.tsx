@@ -168,6 +168,41 @@ export default function Home() {
 
       </div>
 
+      {/* Ultra-Modern Glassmorphic Sliding Lyrics Reader at the Bottom */}
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-2 z-20 w-[95vw] sm:w-[85vw] md:w-[70vw] max-w-4xl bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl px-5 py-3 shadow-[0_0_25px_rgba(234,128,176,0.15)]">
+        
+        {/* Track 1: Original Romantic Text */}
+        <div className="flex w-full items-center gap-3 border-b border-white/10 pb-2">
+          <div 
+            className="overflow-hidden whitespace-nowrap w-full pointer-events-none"
+            style={{
+               maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+               WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+            }}
+          >
+            <div className="inline-block animate-marquee text-pink-200 text-[10px] sm:text-xs md:text-sm font-medium tracking-widest drop-shadow-md pr-full uppercase">
+              You are the missing piece to my soul ♥ My heart beats only for you ♥ Every moment with you is a dream come true ♥ I will love you today, tomorrow, and forever 
+            </div>
+          </div>
+        </div>
+
+        {/* Track 2: Lyrics */}
+        <div className="flex w-full items-center gap-3 pt-0.5">
+          <span className="text-pink-400/80 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">Lyrics</span>
+          <div 
+            className="overflow-hidden whitespace-nowrap w-full opacity-80"
+            style={{
+               maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+               WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+            }}
+          >
+            <div className="inline-block animate-marquee-lyrics text-pink-300 text-[9px] sm:text-[11px] md:text-xs font-mono tracking-wider pr-full">
+              I wanna be your vacuum cleaner • Breathing in your dust • I wanna be your Ford Cortina • I will never rust • If you like your coffee hot • Let me be your coffee pot • You call the shots, babe • I just wanna be yours • Secrets I have held in my heart • Are harder to hide than I thought • Maybe I just wanna be yours • Let me be your 'leccy meter • And I'll never run out • Let me be the portable heater • That you'll get cold without • I wanna be your setting lotion • Hold your hair in deep devotion • At least as deep as the Pacific Ocean • I wanna be yours
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
