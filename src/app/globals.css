@@ -68,13 +68,13 @@ body {
 }
 
 .animate-marquee {
-  animation: marquee 150s linear infinite;
-  /* Slower, highly elegant drift */
+  animation: marquee 300s linear infinite;
+  /* Ultimate slow crawl for perfect readability */
 }
 
 .animate-marquee-lyrics {
-  animation: marquee 180s linear infinite;
-  /* Perfectly timed for the lengthy lyrics tracking */
+  animation: marquee 380s linear infinite;
+  /* Extremely slow tracking for the dense lyrics */
 }
 
 /* Twinkling Stars Background */

@@ -181,7 +181,7 @@ export default function Home() {
             }}
           >
             <div className="inline-block animate-marquee text-pink-200 text-[10px] sm:text-xs md:text-sm font-medium tracking-widest drop-shadow-md pr-full uppercase">
-              I carry your heart with me ♥ I carry it in my heart ♥ I am never without it ♥ anywhere I go you go, my dear ♥ and whatever is done by only me is your doing, my darling ♥ I fear no fate, for you are my fate, my sweet ♥ I want no world, for beautiful you are my world, my true ♥ here is the deepest secret nobody knows ♥ here is the root of the root and the bud of the bud and the sky of the sky of a tree called life ♥ and this is the wonder that's keeping the stars apart ♥ I carry your heart with me ♥ I carry it in my heart
+              I carry your heart with me ♥ I carry it in my heart ♥ I am never without it ♥ anywhere I go you go, my dear ♥ and whatever is done by only me is your doing, my darling ♥ I fear no fate, for you are my fate, my sweet ♥ I want no world, for beautiful you are my world, my true ♥ here is the deepest secret nobody knows ♥ here is the root of the root and the bud of the bud and the sky of the sky of a tree called life ♥ and this is the wonder that's keeping the stars apart ♥ I carry your heart with me ♥ I carry it in my heart ♥ — E. E. CUMMINGS
             </div>
           </div>
         </div>
