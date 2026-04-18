@@ -11,8 +11,8 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true); // Ensures client-side hydration for the Live Date clock
     let rafId: number;
-    const speed = 0.0025; 
-    
+    const speed = 0.0025;
+
     const loop = () => {
       setTimeOffset((prev) => (prev + speed) % (Math.PI * 2));
       rafId = requestAnimationFrame(loop);
@@ -21,20 +21,30 @@ export default function Home() {
     return () => cancelAnimationFrame(rafId);
   }, []);
 
-  const totalElements = 25; 
-  
+  const totalElements = 25;
+
   const hearts = Array.from({ length: totalElements }).map((_, i) => {
+    const getPos = (ang: number) => {
+      const px = 16 * Math.pow(Math.sin(ang), 3);
+      const py = -(13 * Math.cos(ang) - 5 * Math.cos(2 * ang) - 2 * Math.cos(3 * ang) - Math.cos(4 * ang));
+      return { px, py };
+    };
+
     const angle = ((i / totalElements) * Math.PI * 2) + timeOffset;
-    
-    const x = 16 * Math.pow(Math.sin(angle), 3);
-    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
-    
-    // Map Cartesian coordinates to percentage logic!
-    // Using 18 bounds allows the text to stay nicely inside the edges of the box 100% responsively.
+    const pos = getPos(angle);
+    const nextPos = getPos(angle + 0.01);
+
+    // Calculate tangent angle for rotation so text points along the curve
+    const dx = nextPos.px - pos.px;
+    const dy = nextPos.py - pos.py;
+    const rotation = Math.atan2(dy, dx) * (180 / Math.PI);
+
+    // Map Cartesian coordinates to percentage logic
     return {
-      id: i, 
-      x: ((x / 18) * 50).toFixed(3),
-      y: ((y / 18) * 50).toFixed(3),
+      id: i,
+      x: ((pos.px / 18) * 50).toFixed(3),
+      y: ((pos.py / 18) * 50).toFixed(3),
+      rotation: rotation.toFixed(2),
       index: i
     };
   });
@@ -59,7 +69,7 @@ export default function Home() {
     // using Number arguments (year, monthIndex, day) safely works across all browsers
     const start = new Date(2023, 8, 28); // Sep 28, 2023 
     const now = new Date();
-    
+
     years = now.getFullYear() - start.getFullYear();
     months = now.getMonth() - start.getMonth();
     days = now.getDate() - start.getDate();
@@ -80,7 +90,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[100svh] relative w-full overflow-hidden px-4 pb-32 pt-8 sm:py-16">
-      
+
       {/* Starry Night Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {stars.map((star) => (
@@ -104,26 +114,27 @@ export default function Home() {
 
       {/* Main Structural Flex Wrapper - Flex-col on mobile, Flex-row side-by-side on desktop Web */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-center lg:justify-evenly w-full max-w-7xl gap-10 lg:gap-16 flex-1 px-4 lg:px-12">
-        
+
         {/* The 3D Heart Container - Uses standard CSS dimensional scaling */}
-        <div 
-          id="ui" 
+        <div
+          id="ui"
           className="relative transform-style-3d flex items-center justify-center animate-float-heart w-[90vw] h-[90vw] max-w-[55vh] max-h-[55vh] lg:max-w-[600px] lg:max-h-[600px]"
         >
           {/* Words tracking along the heart shape perimeter algorithmically via Percentages */}
           {hearts.map((heart) => (
             <div
               key={heart.id}
-              className="absolute transform-style-3d"
+              className="absolute transform-style-3d whitespace-nowrap"
               style={{
                 left: `calc(50% + ${heart.x}%)`,
                 top: `calc(50% + ${heart.y}%)`,
+                transform: `translate(-50%, -50%) rotate(${heart.rotation}deg)`,
                 // Pulls strictly from its exact geometric center regardless of varying word widths
               } as React.CSSProperties}
             >
-              <div 
-                className="love_word font-bold tracking-[1.5px] whitespace-nowrap select-none"
-                style={{ fontSize: 'clamp(0.6rem, 2vmin, 1rem)' }} // flawless bound scaling
+              <div
+                className="love_word font-bold tracking-[1.5px] select-none"
+                style={{ fontSize: 'clamp(0.4rem, 1.2vmin, 0.8rem)' }} // scaled down slightly to fit curve
               >
                 I love You, Achitkaly
               </div>
@@ -136,7 +147,7 @@ export default function Home() {
           <p className="text-[12px] sm:text-[14px] md:text-[16px] text-pink-200 font-mono tracking-[0.1em] drop-shadow-[0_0_8px_rgba(234,128,176,0.8)] text-center uppercase">
             Koko is in love with Thel Thel for
           </p>
-          
+
           {/* Only fade in rendering after initial client mount to avoid hydration mismatch errors with the local Date */}
           <div className={`flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:gap-4 text-pink-50 font-bold drop-shadow-[0_0_20px_rgba(234,128,176,1)] transition-opacity duration-1000 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
             {[
