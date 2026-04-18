@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --heart-color: #ea80b0;
+  --background: #03010a; /* Deepest indigo-black for maximum contrast against neon pink */
+  --foreground: #fff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  perspective: 1200px; /* Enhanced depth perception */
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.love_word {
+  color: #fdf2f8; /* Crisp ultralight pink core for intense neon realism */
+  text-shadow: 0 0 5px #fff, 0 0 15px var(--heart-color), 0 0 35px var(--heart-color); /* Premium multi-layered neon bloom */
+  transform: translateY(-100%) rotateZ(-30deg);
+  letter-spacing: 1.5px;
+}
+
+/* Elegant levitating animation for the entire fixed-angle heart wrapper */
+@keyframes float-heart {
+  0%, 100% { transform: rotateX(-10deg) rotateY(15deg) rotateZ(5deg) scale3d(1.1, 1.1, 1.1) translateY(0px); }
+  50% { transform: rotateX(-10deg) rotateY(15deg) rotateZ(5deg) scale3d(1.1, 1.1, 1.1) translateY(-15px); }
+}
+
+.animate-float-heart {
+  animation: float-heart 8s ease-in-out infinite;
+}
+
+/* Marquee Effect for Horizontal Text */
+@keyframes marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite; /* Slower, highly elegant drift */
+}
+
+.animate-marquee-lyrics {
+  animation: marquee 50s linear infinite; /* Perfectly timed for the lengthy lyrics tracking */
+}
+
+/* Twinkling Stars Background */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 10px rgba(255,255,255,0.8); }
+}
+
+.animate-twinkle {
+  animation: twinkle 5s infinite ease-in-out alternate;
 }
